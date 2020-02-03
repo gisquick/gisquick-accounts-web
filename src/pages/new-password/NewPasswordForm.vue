@@ -131,8 +131,10 @@ form {
   align-items: center;
 
   p {
-    color: #777;
     font-size: 14px;
+    &:not(.error--text) {
+      color: #777;
+    }
   }
   ::v-deep .text-field {
     width: 100%;
