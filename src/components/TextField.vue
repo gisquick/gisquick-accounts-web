@@ -94,10 +94,6 @@ export default {
         height: 2px;
       }
     }
-    .append {
-      position: absolute;
-      right: 0;
-    }
   }
   input {
     display: inline-block;
