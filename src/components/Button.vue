@@ -1,15 +1,17 @@
 <template>
-  <button
+  <component
+    :is="href ? 'a' : 'button'"
     type="button"
     class="v-btn"
     :class="classes"
     :disabled="disabled"
+    :href="disabled ? '#' : href"
     @click="$emit('click', $event)"
   >
     <div class="v-btn__content">
       <slot/>
     </div>
-  </button>
+  </component>
 </template>
 
 <script>
@@ -19,7 +21,8 @@ export default {
     raised: Boolean,
     primary: Boolean,
     transparent: Boolean,
-    icon: Boolean
+    icon: Boolean,
+    href: String
   },
   computed: {
     classes () {
