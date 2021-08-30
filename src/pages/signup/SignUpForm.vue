@@ -1,9 +1,11 @@
 <template>
   <form autocomplete="off" spellcheck="false">
     <!-- Hidden fields as workaround for chrome browser to ignore autocomplete/autofill -->
-    <text-field
+    <v-text-field
+      autofocus
       label="Username"
       class="required"
+      name="username"
       v-model="form.username"
       :error="validators.username.error"
       @input="validators.username.validate"
@@ -11,16 +13,18 @@
       <template v-slot:append>
         <validator-mark :validator="validators.username"/>
       </template>
-    </text-field>
-    <text-field
+    </v-text-field>
+    <v-text-field
       label="First name"
+      name="first_name"
       v-model="form.first_name"
     />
-    <text-field
+    <v-text-field
       label="Last name"
+      name="last_name"
       v-model="form.last_name"
     />
-    <text-field
+    <v-text-field
       label="Email"
       class="required"
       type="email"
@@ -33,49 +37,56 @@
       <template v-slot:append>
         <validator-mark :validator="validators.email"/>
       </template>
-    </text-field>
-    <text-field
+    </v-text-field>
+
+    <v-text-field
       label="Password"
       class="required"
-      name="new-password"
-      autocomplete="new-password"
-      v-model="form.password1"
       :type="passwordVisible ? 'text' : 'password'"
+      v-model="form.password1"
       :error="validators.password1.error"
       @input="validators.password1.validate"
     >
       <template v-slot:append>
-        <v-button
+        <v-btn
+          aria-label="Toggle password visibility"
+          tabindex="-1"
           class="icon transparent"
           @click="passwordVisible = !passwordVisible"
         >
           <v-icon :name="passwordVisible ? 'visibility' : 'visibility_off'"/>
-        </v-button>
+        </v-btn>
       </template>
-    </text-field>
-    <text-field
+    </v-text-field>
+    <v-text-field
       label="Confirm password"
       class="required"
-      autocomplete="new-password"
-      v-model="form.password2"
       :type="passwordVisible ? 'text' : 'password'"
+      v-model="form.password2"
       :error="validators.password2.error"
       @input="validators.password2.validate"
+      @keydown.enter="createAccount"
     />
-    <v-button
-      class="raised primary"
-      :disabled="processing || !formValid"
+    <div v-if="error" class="f-row f-justify-center error m-2">
+      <v-icon name="circle-error-outline" class="mr-2"/>
+      <p>Failed to create a new account</p>
+    </div>
+
+    <v-btn
+      color="primary"
+      :disabled="!formValid"
+      :loading="processing"
       @click="createAccount"
     >
-      Create Account
-    </v-button>
+      <span>Create Account</span>
+    </v-btn>
   </form>
 </template>
 
 <script>
-import TextField from '@/components/TextField'
-import VButton from '@/components/Button'
-import VIcon from '@/components/Icon'
+import VTextField from '@/ui/TextField.vue'
+import VBtn from '@/ui/Button.vue'
+import VIcon from '@/ui/Icon.vue'
 import { createValidator, requiredValidator, minLengthValidator, emailValidator } from '@/validators.js'
 
 const ValidatorMark = {
@@ -87,7 +98,7 @@ const ValidatorMark = {
     const { error, validating, checked } = ctx.props.validator
     if (checked && !validating) {
       const symbol = error ? 'error_outline' : 'check_circle_outline'
-      return <VIcon size={22} name={symbol}/>
+      return <VIcon size={22} name={symbol} class="m-2"/>
     }
     return null
   }
@@ -95,13 +106,14 @@ const ValidatorMark = {
 
 export default {
   components: {
-    TextField,
-    VButton,
+    VTextField,
+    VBtn,
     VIcon,
     ValidatorMark
   },
   data () {
     return {
+      error: false,
       processing: false,
       passwordVisible: false,
       form: {
@@ -163,37 +175,20 @@ export default {
       })
       this.processing = false
       if (response.ok) {
+        this.error = false
         this.$emit('submit')
-      } if (response.status === 400) {
-        const data = await response.json()
-        Object.keys(data).forEach(key => {
-          if (this.validators[key]) {
-            this.validators[key].error = data[key][0]
-          }
-        })
+      } else {
+        this.error = true
+        if (response.status === 400) {
+          const data = await response.json()
+          Object.keys(data).forEach(key => {
+            if (this.validators[key]) {
+              this.validators[key].error = data[key][0]
+            }
+          })
+        }
       }
     }
   }
 }
 </script>
-
-<style lang="scss" scoped>
-form {
-  background-color: #eee;
-  padding: 1em 1.5em;
-  border-radius: 3px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  ::v-deep .text-field {
-    width: 100%;
-    label {
-      min-width: 130px;
-    }
-    &.required label {
-      font-weight: 500;
-    }
-  }
-}
-</style>

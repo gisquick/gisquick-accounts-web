@@ -1,4 +1,5 @@
 const CompressionPlugin = require('compression-webpack-plugin')
+const SpritePlugin = require('./svg-sprite.js')
 
 module.exports = {
   lintOnSave: 'warning',
@@ -8,7 +9,10 @@ module.exports = {
   publicPath: process.env.NODE_ENV === 'production' ? '/accounts/' : '/',
   assetsDir: 'static',
   configureWebpack: {
-    plugins: [new CompressionPlugin()],
+    plugins: [
+      new CompressionPlugin(),
+      new SpritePlugin({ path: './icons' })
+    ],
     optimization: {
       splitChunks: {
         minSize: 50000,
@@ -47,18 +51,6 @@ module.exports = {
 
     config.module
       .rule('svg')
-      .oneOf('sprite')
-        .test(/icons\/.*\.svg$/)
-        .use('babel')
-          .loader('babel-loader')
-          .end()
-        .use('svg-sprite')
-          .loader('svg-sprite-loader')
-          .end()
-        .use('svgo')
-          .loader('svgo-loader')
-          .end()
-        .end()
 
       .oneOf('inline-svg')
         .resourceQuery(/inline/)

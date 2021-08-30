@@ -5,6 +5,8 @@ export const requiredValidator = value => !value && 'Field is required'
 export const minLengthValidator = length => value => value.length < length && `Required at least ${length} characters`
 const isValidEmail = email => /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(email)
 export const emailValidator = value => !isValidEmail(value) && 'Invalid email address'
+export const isValidUrl = url => /^(ftp|http|https):\/\/[^ "]+$/.test(url)
+export const urlValidator = value => !isValidUrl(value) && 'Invalid URL address'
 
 export function createValidator (rules, debounceTime = 350) {
   const validator = {

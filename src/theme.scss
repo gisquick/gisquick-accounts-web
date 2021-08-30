@@ -1,17 +1,16 @@
-.transparent {
-  background-color: transparent;
-}
-.primary {
-  background-color: #1e88e5;
-  color: rgba(255, 255, 255, .87);
-}
-.primary--text {
-  color: #1e88e5!important;
-}
-.error {
-  background-color: #D32F2F!important;
-  color: rgba(255, 255, 255, .87);
-}
-.error--text {
-  color: #D32F2F;
+:root {
+  --color-primary: rgb(46, 108, 158);
+  --color-primary-rgb: 46,108,158;
+
+  --color-green: #1FCB7C;
+  --color-green-rgb: 31,203,124;
+
+  --color-red: #f33939;
+  --color-red-rgb: 235,87,87;
+
+  --color-orange: #FF9D3B;
+  --color-orange-rgb: 255,157,59;
+
+  --color-yellow: #F2C94C;
+  --color-yellow-rgb: 242,201,76;
 }

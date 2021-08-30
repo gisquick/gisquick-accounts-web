@@ -6,7 +6,7 @@
       v-if="!submitted"
       @submit="submitted = true"
     />
-    <p v-else>
+    <p v-else class="text-center">
       Before you can sign in, you must active your account. Activation link was sent to your email address.
     </p>
   </base-page>
@@ -28,16 +28,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-form {
-  margin-bottom: 1em;
-  min-width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  color: #111;
-}
-p {
-  text-align: center;
-}
-</style>

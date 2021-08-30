@@ -1,4 +1,5 @@
-switch (location.pathname) {
+const pathname = location.pathname.replace(/\/+$/, '')
+switch (pathname) {
   case '/signup':
     require('./signup/main.js')
     break

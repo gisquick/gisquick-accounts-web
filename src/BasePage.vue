@@ -3,10 +3,10 @@
     <!-- <div class="bg-logo">
       <img src="./assets/image_logo.svg" class="bg-logo">
     </div> -->
-    <logo class="bg-logo" viewBox="0 0 120 120" height="80vh" width="100%"/>
+    <logo class="bg-logo" height="80vh" width="100%"/>
     <div class="spacer"/>
     <div class="content">
-      <text-logo class="text-logo" viewBox="0 0 750 100" height="50" width="300"/>
+      <text-logo class="text-logo" height="60" width="300"/>
       <slot/>
     </div>
     <div class="spacer"/>
@@ -17,6 +17,8 @@
 <script>
 import Logo from '@/assets/image_logo.svg?inline'
 import TextLogo from '@/assets/text_logo_dark.svg?inline'
+import '@/ui/layout.scss'
+import '@/assets/fonts/fonts.css'
 
 export default {
   components: {
@@ -29,12 +31,28 @@ export default {
 <style lang="scss">
 @import '@/theme.scss';
 
-body {
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
   margin: 0;
-  font-family: "Roboto", "Helvetica", "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial;
+}
+::-moz-focus-inner {
+  border:0;
+}
+
+body {
+  font-family: "Roboto";
   background-color: #111;
   min-width: 100%;
   overflow: auto;
+}
+
+h1 {
+  margin: 16px 8px;
+  font-size: 28px;
+  font-weight: 500;
+  text-align: center;
 }
 
 .app {
@@ -64,35 +82,48 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: 440px;
     position: relative;
-    box-sizing: border-box;
-    min-width: 440px;
+    width: clamp(300px, 440px, 100%);
     color: #fff;
-
-    @media (max-width: 460px) {
-      min-width: 0;
-      max-width: 100%;
-      padding: 0 4px;
-      .text-field {
-        flex-direction: column;
-        flex: 1;
-        label {
-          font-size: 12px;
-        }
-      }
-    }
-    > h1 {
-      font-size: 24px;
-      font-weight: 500;
-      text-align: center;
-    }
   }
   .text-logo {
-    margin: 8px 12px;
+    margin: 12px 12px 24px 12px;
   }
   .spacer {
     flex: 1 1;
   }
+}
+
+form {
+  align-self: stretch;
+  background-color: #f3f3f3;
+  margin: 24px 12px;
+  padding: 24px 12px;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  color: #222;
+  --gutter: 6px;
+  --fill-color: #fff;
+  --icon-color: #333;
+
+  :-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px var(--fill-color) inset;
+    // -webkit-text-fill-color: currentColor;
+  }
+
+  ::v-deep {
+    .text-field {
+      --icon-color: var(--status-color, #444);
+    }
+  }
+
+  @media (max-width: 600px) {
+    padding: 16px 6px;
+  }
+}
+.error {
+  color: var(--color-red);
+  --icon-color: var(--color-red);
 }
 </style>
