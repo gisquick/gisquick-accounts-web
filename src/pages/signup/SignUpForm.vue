@@ -163,7 +163,7 @@ export default {
   },
   methods: {
     async checkLoginParam (param, value, errMsg) {
-      const response = await fetch(`/api/accounts/check_login/?${param}=${encodeURIComponent(value)}`)
+      const response = await fetch(`/api/accounts/check/?field=${param}&value=${encodeURIComponent(value)}`)
       if (response.ok) {
         const data = await response.json()
         return !data.available && errMsg
@@ -172,7 +172,7 @@ export default {
     },
     async createAccount () {
       this.processing = true
-      const response = await fetch('/api/accounts/create/', {
+      const response = await fetch('/api/accounts/signup/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(this.form)

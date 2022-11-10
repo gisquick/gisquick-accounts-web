@@ -45,7 +45,7 @@ export default {
 
       this.processing = true
       this.errorMsg = ''
-      const response = await fetch(`/api/accounts/new_password/${uid}/${token}/`, {
+      const response = await fetch(`/api/accounts/new_password/${location.search}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form)
