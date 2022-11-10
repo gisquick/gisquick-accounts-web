@@ -1,5 +1,11 @@
 <template>
   <form autocomplete="off" spellcheck="false">
+    <v-dialog ref="tos">
+      <template v-slot="{ close }">
+        <agreement-info class="f-col"/>
+        <v-btn class="close" color="#555" @click="close">Close</v-btn>
+      </template>
+    </v-dialog>
     <!-- Hidden fields as workaround for chrome browser to ignore autocomplete/autofill -->
     <v-text-field
       autofocus
@@ -69,6 +75,9 @@
       @blur="validators.password2.validate(form.password2)"
       @keydown.enter="createAccount"
     />
+    <v-checkbox v-model="agreement">
+      <span>I Agree with <a class="link" @click.stop="$refs.tos.show()">Terms of Service</a></span>
+    </v-checkbox>
     <div v-if="error" class="f-row f-justify-center error m-2">
       <v-icon name="circle-error-outline" class="mr-2"/>
       <p>Failed to create a new account</p>
@@ -76,7 +85,7 @@
 
     <v-btn
       color="primary"
-      :disabled="!formValid"
+      :disabled="!agreement || !formValid"
       :loading="processing"
       @click="createAccount"
     >
@@ -88,8 +97,11 @@
 <script>
 import VTextField from '@/ui/TextField.vue'
 import VBtn from '@/ui/Button.vue'
+import VCheckbox from '@/ui/Checkbox.vue'
+import VDialog from '@/ui/Dialog.vue'
 import VIcon from '@/ui/Icon.vue'
 import VSpinner from '@/ui/Spinner.vue'
+import AgreementInfo from '@/components/AgreementInfo.vue'
 
 import { createValidator, requiredValidator, minLengthValidator, emailValidator } from '@/validators.js'
 
@@ -112,14 +124,18 @@ export default {
   components: {
     VTextField,
     VBtn,
+    VCheckbox,
+    VDialog,
     VIcon,
-    ValidatorMark
+    ValidatorMark,
+    AgreementInfo
   },
   data () {
     return {
       error: false,
       processing: false,
       passwordVisible: false,
+      agreement: false,
       form: {
         username: '',
         first_name: '',
@@ -209,5 +225,15 @@ export default {
 }
 form {
   --icon-color: #505050;
+}
+.link {
+  color: var(--color-primary);
+  font-weight: 500;
+}
+.btn.close {
+  min-width: 200px;
+  align-self: center;
+  margin-top: 24px;
+  flex-shrink: 0;
 }
 </style>
