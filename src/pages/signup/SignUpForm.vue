@@ -8,7 +8,8 @@
       name="username"
       v-model="form.username"
       :error="validators.username.error"
-      @input="validators.username.validate"
+      @input="validators.username.debouncedValidate"
+      @blur="validators.username.validate(form.username)"
     >
       <template v-slot:append>
         <validator-mark :validator="validators.username"/>
@@ -32,7 +33,8 @@
       autocomplete="email"
       v-model="form.email"
       :error="validators.email.error"
-      @input="validators.email.validate"
+      @input="validators.email.debouncedValidate"
+      @blur="validators.email.validate(form.email)"
     >
       <template v-slot:append>
         <validator-mark :validator="validators.email"/>
@@ -45,7 +47,7 @@
       :type="passwordVisible ? 'text' : 'password'"
       v-model="form.password1"
       :error="validators.password1.error"
-      @input="validators.password1.validate"
+      @blur="validators.password1.validate(form.password1)"
     >
       <template v-slot:append>
         <v-btn
@@ -64,7 +66,7 @@
       :type="passwordVisible ? 'text' : 'password'"
       v-model="form.password2"
       :error="validators.password2.error"
-      @input="validators.password2.validate"
+      @blur="validators.password2.validate(form.password2)"
       @keydown.enter="createAccount"
     />
     <div v-if="error" class="f-row f-justify-center error m-2">
@@ -87,6 +89,8 @@
 import VTextField from '@/ui/TextField.vue'
 import VBtn from '@/ui/Button.vue'
 import VIcon from '@/ui/Icon.vue'
+import VSpinner from '@/ui/Spinner.vue'
+
 import { createValidator, requiredValidator, minLengthValidator, emailValidator } from '@/validators.js'
 
 const ValidatorMark = {
@@ -98,9 +102,9 @@ const ValidatorMark = {
     const { error, validating, checked } = ctx.props.validator
     if (checked && !validating) {
       const symbol = error ? 'error_outline' : 'check_circle_outline'
-      return <VIcon size={22} name={symbol} class="m-2"/>
+      return <VIcon size={22} name={symbol} class="status-icon m-2"/>
     }
-    return null
+    return validating ? <VSpinner size="18" width="2" class="m-2"/> : null
   }
 }
 
@@ -192,3 +196,18 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.checkbox {
+  font-size: 14px;
+}
+.spinner {
+  align-self: center;
+}
+.status-icon {
+  --icon-color: var(--status-color, #505050);
+}
+form {
+  --icon-color: #505050;
+}
+</style>

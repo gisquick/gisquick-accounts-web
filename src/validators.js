@@ -8,7 +8,7 @@ export const emailValidator = value => !isValidEmail(value) && 'Invalid email ad
 export const isValidUrl = url => /^(ftp|http|https):\/\/[^ "]+$/.test(url)
 export const urlValidator = value => !isValidUrl(value) && 'Invalid URL address'
 
-export function createValidator (rules, debounceTime = 350) {
+export function createValidator (rules, debounceTime = 500) {
   const validator = {
     error: null,
     validating: false,
@@ -31,17 +31,13 @@ export function createValidator (rules, debounceTime = 350) {
     }
     return ''
   }
-  const debouncedValidate = debounce(async value => {
+  validator.validate = async value => {
+    validator.validating = true
     const err = await validate(value)
     validator.error = err
     validator.checked = true
     validator.validating = false
-  }, debounceTime)
-
-  validator.validate = function (value) {
-    validator.validating = true
-    validator.error = ''
-    debouncedValidate(value)
   }
+  validator.debouncedValidate = debounce(validator.validate, debounceTime)
   return validator
 }

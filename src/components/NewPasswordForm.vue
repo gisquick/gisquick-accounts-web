@@ -13,7 +13,7 @@
       :type="passwordVisible ? 'text' : 'password'"
       v-model="form.new_password1"
       :error="validators.new_password1.error"
-      @input="validators.new_password1.validate"
+      @blur="validators.new_password1.validate(form.new_password1)"
     >
       <template v-slot:append>
         <v-btn
@@ -32,7 +32,7 @@
       :type="passwordVisible ? 'text' : 'password'"
       v-model="form.new_password2"
       :error="validators.new_password2.error"
-      @input="validators.new_password2.validate"
+      @blur="validators.new_password2.validate(form.new_password2)"
       @keydown.enter="onSubmit"
     />
     <v-btn
