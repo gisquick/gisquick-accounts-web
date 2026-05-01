@@ -1,4 +1,6 @@
-# gisquick-accounts-web
+# Gisquick Accounts Web Interface
+
+Web interface for the registration form and password reset.
 
 ## Docker build
 ```
